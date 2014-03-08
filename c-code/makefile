@@ -6,8 +6,8 @@ loadbmp: loadbmp.o tft.o RAIO8870.o bmp.o
 writetext: writetext.o tft.o RAIO8870.o
 	gcc writetext.o tft.o RAIO8870.o -lbcm2835 -lrt -lm -o writetext
 
-clearscreen: clearscreen.o tft.o
-	gcc clearscreen.o tft.o -lbcm2835 -lrt -lm -o clearscreen
+clearscreen: clearscreen.o tft.o RAIO8870.o
+	gcc clearscreen.o tft.o RAIO8870.o -lbcm2835 -lrt -lm -o clearscreen
 
 tft.o: tft.c tft.h
 	gcc -Os -c tft.c
