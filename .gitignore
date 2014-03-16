@@ -2,6 +2,7 @@
 *.Cache
 ~$*
 *~
+*.o
 
 #############
 ## Windows detritus
