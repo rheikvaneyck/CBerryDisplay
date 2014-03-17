@@ -19,7 +19,7 @@ else
   echo "Kann die JPG-Datei nicht lesen"
 fi
 
-RESULT=$(identify ${BMP} | cut -d ' ' -f 2)
+RESULT=$(identify ${BMPFILE} | cut -d ' ' -f 2)
 
 if [[ ${RESULT}='BMP' ]]; then
   echo "Konvertierung erfolgreich: ${BMPFILE}"
