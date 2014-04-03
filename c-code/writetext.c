@@ -20,7 +20,7 @@ int main( int argc, char **argv ) {
   
   // depict a BMP file
   // ---------------------------------------------  
-  WriteText( argv );
+  WriteText_BW( argv );
       
   bcm2835_close();
   
