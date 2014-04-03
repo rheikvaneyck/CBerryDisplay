@@ -17,6 +17,10 @@ if [[ -z $(which convert) ]]; then
   exit 1
 fi
 
+if [[ -n $2 ]]; then
+  BMPFILE="${2%.*}.bmp"
+fi
+
 if [[ -f $1 ]]; then
   SCRIPTPATH=$(dirname "$0")
   TEMPLATE=${SCRIPTPATH}/CurrentTitleTemplate.svg
