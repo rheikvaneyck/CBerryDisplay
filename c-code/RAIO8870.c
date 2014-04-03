@@ -181,7 +181,7 @@ void RAIO_init( void )
 	// Backlight dimming       
 	RAIO_SetBacklightPWMValue(50);
 
-	Text_Background_Color( COLOR_WHITE );  
+	Text_Background_Color( COLOR_BLACK );  
 	// memory clear with background color                 
     RAIO_SetRegister( MCLR, 0x81 );     
     TFT_wait_for_raio(); 

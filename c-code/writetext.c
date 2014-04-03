@@ -2,7 +2,7 @@
 
 void WriteText_BW( unsigned char *text ) {    
   RAIO_SetFontSizeFactor ( 0 );
-  RAIO_print_text ( 10, 10, text, COLOR_BLACK , COLOR_WHITE );
+  RAIO_print_text ( 0, 0, text, COLOR_BLACK , COLOR_WHITE );
 }
 
 
@@ -20,7 +20,7 @@ int main( int argc, char **argv ) {
   
   // depict a BMP file
   // ---------------------------------------------  
-  WriteText_BW( argv );
+  WriteText_BW( (unsigned char*) argv[1]);
       
   bcm2835_close();
   

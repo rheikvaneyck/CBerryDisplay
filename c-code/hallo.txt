@@ -1,0 +1,1 @@
+Hallo! Das ist ein längerer Text in ISO8859-1. 
