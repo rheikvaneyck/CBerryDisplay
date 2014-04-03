@@ -1,18 +1,28 @@
 #include "writetext.h"
 
-void WriteText_BW( uint16_t pos_x, unsigned char *text ) {    
+void WriteText( uint16_t pos_y, unsigned char *text, uint8_t fg_color) {
   RAIO_SetFontSizeFactor ( 0 );
-  RAIO_print_text ( pos_x, 0, text, COLOR_BLACK , COLOR_WHITE );
+  RAIO_print_text ( 0, pos_y, text, COLOR_BLACK , fg_color );
 }
 
 
-int main( int argc, char **argv ) { 
+int main( int argc, char **argv ) {
 
   bool rst_screen = true;
-  line_number = 1;
-  font_size = 16;
+  bool blank_line = false;
+  uint8_t line_number = 1;
+  uint8_t font_size = 16;
+  char color_name[10];
+  uint8_t color = COLOR_WHITE;
+  uint8_t bg_color = COLOR_BLACK;
+  int opt;
 
-  while((opt = getopt(argc, argv, "rl:")) != -1) {
+  uint16_t characters_per_line = 320 / font_size * 2;
+  uint16_t max_line_number = 240 / font_size;
+  char *spaces;
+
+
+  while((opt = getopt(argc, argv, "rbl:c:")) != -1) {
     switch (opt) {
       case 'r':
         rst_screen = false;
@@ -20,11 +30,36 @@ int main( int argc, char **argv ) {
       case 'l':
         line_number = atoi(optarg);
         break;
+      case 'c':
+        strncpy(color_name, optarg, 10);
+        break;
+      case 'b':
+        blank_line = true;
+        break;
       default:
-        fprintf(stderr, "Usage: %s [-r] [-l number]\n", argv[0]);
+        fprintf(stderr, "Usage: %s [-r] [-l number] [-c text_color]\n", argv[0]);
         exit(EXIT_FAILURE);
     }
   }
+
+ if (strcmp(color_name, "red") == 0) {
+    color = COLOR_RED;
+  } else if (strcmp(color_name, "green") == 0) {
+    color = COLOR_GREEN;
+  } else if (strcmp(color_name, "blue") == 0) {
+    color = COLOR_BLUE;
+  } else if (strcmp(color_name, "yellow") == 0) {
+    color = COLOR_YELLOW;
+  } else if (strcmp(color_name, "cyan") == 0) {
+    color = COLOR_CYAN;
+  } else if (strcmp(color_name, "magenta") == 0) {
+    color = COLOR_MAGENTA;
+  } else if (strcmp(color_name, "darkgreen") == 0) {
+    color = COLOR_DARK_GREEN;
+  } else {
+    color = COLOR_WHITE;
+  }
+
 
   if (!bcm2835_init())
     return 1;
@@ -35,12 +70,18 @@ int main( int argc, char **argv ) {
     RAIO_init();  
   }
 
-  
-  WriteText_BW((line_number - 1)*font_size, (unsigned char*) argv[1]);
+  if (blank_line) {
+    spaces = malloc(characters_per_line*sizeof(char));
+    memset(spaces, ' ', characters_per_line);
+    WriteText((line_number - 1)*font_size, spaces, bg_color);
+  }
 
-  printf("%i\n", line_number);
+  WriteText((line_number - 1)*font_size, (unsigned char*) argv[optind], color);
+
+  printf("%i\n", line_number + 1 > max_line_number ? 1 : line_number + 1);
+
       
   bcm2835_close();
   
-  return 0;
+  exit(EXIT_SUCCESS);
 }
