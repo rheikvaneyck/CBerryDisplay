@@ -39,7 +39,7 @@ int main( int argc, char **argv ) {
         blank_line = true;
         break;
       default:
-        fprintf(stderr, "Usage: %s [-r] [-l number] [-c text_color]\n", argv[0]);
+        fprintf(stderr, "Usage: %s [-r] [-b] [-l number] [-c text_color]\n", argv[0]);
         exit(EXIT_FAILURE);
     }
   }
