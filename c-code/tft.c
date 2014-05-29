@@ -146,6 +146,26 @@ void TFT_SPI_data_out ( uint16_t data )
 	bcm2835_spi_writenb( &buffer[0], 2 );
 }
 
+// read data via SPI from tft
+// ----------------------------------------------------------
+uint16_t TFT_SPI_data_in ( uint16_t data )
+{
+  union my_union buffer;
+  char tbuf[2];
+  char rbuf[2];
+
+  buffer.value = data;
+  tbuf[0] = (char)buffer.split.high;
+  tbuf[1] = (char)buffer.split.low;
+
+	bcm2835_spi_transfernb( &tbuf[0], &rbuf[0], 2 );
+
+  buffer.split.high = rbuf[0];
+  buffer.split.low = rbuf[1];
+
+  return buffer.value;
+}
+
 
 // write byte to register
 // ----------------------------------------------------------
@@ -178,6 +198,28 @@ void TFT_DataWrite( uint16_t data )
     bcm2835_gpio_write( RAIO_WR, HIGH );
 	bcm2835_gpio_write( RAIO_CS, HIGH ); 
 	bcm2835_gpio_write( OE, HIGH );
+};
+
+// read byte from tft
+// ----------------------------------------------------------
+uint16_t TFT_DataRead( void )
+{ 
+  uint16_t retval;
+  uint16_t data = 0xff;
+
+	bcm2835_gpio_write( RAIO_RS, LOW); 
+	bcm2835_gpio_write( RAIO_CS, LOW ); 
+  bcm2835_gpio_write( OE, LOW );
+  bcm2835_gpio_write( RAIO_WR, HIGH);
+  bcm2835_gpio_write( RAIO_RD, LOW ); 
+  
+  retval = TFT_SPI_data_in ( data );
+        
+  bcm2835_gpio_write( RAIO_RD, HIGH );
+	bcm2835_gpio_write( RAIO_CS, HIGH ); 
+	bcm2835_gpio_write( OE, HIGH );
+
+  return retval;
 };
 
 

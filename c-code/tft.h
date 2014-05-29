@@ -103,6 +103,9 @@ void TFT_RegWrite( uint16_t reg );
 // ----------------------------------------------------------
 void TFT_DataWrite( uint16_t data );
 
+// read byte from tft
+// ----------------------------------------------------------
+uint16_t TFT_DataRead( void );
 
 // write 'count'-bytes to tft
 // ----------------------------------------------------------

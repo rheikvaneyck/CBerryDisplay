@@ -74,6 +74,14 @@ void RAIO_SetRegister( uint8_t reg, uint8_t value )
     TFT_DataWrite( (uint16_t)value );
 }
 
+// read command from a register
+// ----------------------------------------------------------
+uint16_t RAIO_GetRegister( uint8_t reg )
+{
+    TFT_RegWrite( (uint16_t) reg );
+    return TFT_DataRead();
+}
+
 
 // set PWM value for backlight 
 // ----------------------------------------------------------

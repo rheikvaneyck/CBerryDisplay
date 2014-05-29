@@ -16,6 +16,8 @@ int main( int argc, char **argv ) {
   uint8_t color = COLOR_WHITE;
   uint8_t bg_color = COLOR_BLACK;
   int opt;
+  union my_union cursor_x;
+  union my_union cursor_y;
 
   uint16_t characters_per_line = 320 / font_size * 2;
   uint16_t max_line_number = 240 / font_size;
@@ -64,7 +66,7 @@ int main( int argc, char **argv ) {
   if (!bcm2835_init())
     return 1;
   
-  if (rst_screen)) {
+  if (rst_screen) {
     TFT_init_board();
     TFT_hard_reset();
     RAIO_init();  
@@ -78,6 +80,20 @@ int main( int argc, char **argv ) {
 
   WriteText((line_number - 1)*font_size, (unsigned char*) argv[optind], color);
 
+  RAIO_SetRegister( MWCR0, 0x80 );
+  RAIO_SetRegister(CURH0, 0x10);
+  RAIO_SetRegister(CURH1, 0x01);
+  RAIO_SetRegister(CURV0, 0x20);
+  RAIO_SetRegister(CURV1, 0x01);
+  TFT_RegWrite( MRWC );
+  TFT_DataWrite( 'A' );
+
+  cursor_x.split.low = (uint8_t) RAIO_GetRegister(RCURH0);
+  cursor_x.split.high = (uint8_t) RAIO_GetRegister(RCURH01);
+  cursor_y.split.low = (uint8_t) RAIO_GetRegister(RCURV0);
+  cursor_y.split.high = (uint8_t) RAIO_GetRegister(RCURV1);
+  RAIO_SetRegister( MWCR0, 0x00 );
+  printf("Cursor pos: (%i, %i)\n", cursor_x.value, cursor_y.value);  
   printf("%i\n", line_number + 1 > max_line_number ? 1 : line_number + 1);
 
       
