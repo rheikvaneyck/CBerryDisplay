@@ -1,4 +1,4 @@
-all: loadbmp
+all: loadbmp writetext clearscreen
 
 loadbmp: loadbmp.o tft.o RAIO8870.o bmp.o 
 	gcc loadbmp.o tft.o RAIO8870.o bmp.o -lbcm2835 -lrt -lm -o loadbmp
