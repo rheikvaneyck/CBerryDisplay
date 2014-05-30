@@ -25,6 +25,5 @@ Danach werden die die C-Programme im Verzeichnis *c-code/* kompiliert und ins *b
 ```
 cd c-code
 make
-make install 
 ```
 
