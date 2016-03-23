@@ -77,8 +77,21 @@ int main( int argc, char **argv ) {
     memset(spaces, ' ', characters_per_line);
     WriteText((line_number - 1)*font_size, spaces, bg_color);
   }
-
-  WriteText((line_number - 1)*font_size, (unsigned char*) argv[optind], color);
+  
+  //edited for interpreting word wrap
+  unsigned char *s = strdup(argv[optind]);
+  unsigned char more = 'x';
+  unsigned char *p = s;
+  
+  while(more)
+  {
+	while (*p && *p != '\n') p++;
+	more = *p;
+	*p = '\0';
+    WriteText((line_number - 1)*font_size, s, color);
+    line_number++;
+	s = ++p;
+  }
 
   RAIO_SetRegister( MWCR0, 0x80 );
   RAIO_SetRegister(CURH0, 0x10);
@@ -86,7 +99,7 @@ int main( int argc, char **argv ) {
   RAIO_SetRegister(CURV0, 0x20);
   RAIO_SetRegister(CURV1, 0x01);
   TFT_RegWrite( MRWC );
-  TFT_DataWrite( 'A' );
+ // TFT_DataWrite( 'A' );      // Wrights an A on the Display - removed
 
   cursor_x.split.low = (uint8_t) RAIO_GetRegister(RCURH0);
   cursor_x.split.high = (uint8_t) RAIO_GetRegister(RCURH01);
